@@ -19,7 +19,7 @@ export class MenuService {
   async createMenu(createItemDto: CreateItemDto): Promise<Menu> {
     const { item, description, type } = createItemDto;
     const createItem: CreateItemDto = {
-      item: item.toUpperCase(),
+      item: item.toUpperCase(), // to make item unique
       description,
       type,
     };
@@ -66,7 +66,7 @@ export class MenuService {
       .where('(UPPER(menu.item)) LIKE UPPER(:item)', {
         item: `%${item}%`,
       })
-      .getOne();
+      .getOne(); // this sort of feels faster than regex
 
     if (!found) {
       throw new NotFoundException();

@@ -54,7 +54,7 @@ export class OrdersService {
           orderId,
           userId,
         })
-        .getOne();
+        .getOne(); // just to make sure user gets only the orders they own
     }
 
     if (!found) {
@@ -80,7 +80,7 @@ export class OrdersService {
       update = {
         orderId,
         customerId: userId,
-        item: updateOrderDto.item.toUpperCase(),
+        item: updateOrderDto.item.toUpperCase(), // to follow with item's unique name
         quantity: updateOrderDto.quantity,
       };
     } else {
