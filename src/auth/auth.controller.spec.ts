@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockCreateUser } from '../mock-testing-data/mock-user';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { mockCreateUser } from '../mock-data/mock-users';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
@@ -16,11 +15,7 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: {
-            login: jest
-              .fn()
-              .mockImplementation(async (mockCreateUser: CreateUserDto) => {
-                return await mockJWTToken;
-              }),
+            login: jest.fn().mockResolvedValue(mockJWTToken),
           },
         },
       ],

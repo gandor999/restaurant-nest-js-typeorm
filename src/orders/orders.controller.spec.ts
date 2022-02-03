@@ -1,14 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockUser } from '../mock-testing-data/mock-user';
+import { mockUser } from '../mock-data/mock-users';
 import {
-  mockOrder,
   mockCreateOrder,
+  mockOrder,
   mockUpdateOrder,
   orderId,
-} from '../mock-testing-data/mock-order';
-import { ReqUserDto } from '../users/dto/req.user.dto';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+} from '../mock-data/mock-orders';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 
@@ -22,56 +19,11 @@ describe('OrdersController', () => {
         {
           provide: OrdersService,
           useValue: {
-            getOrders: jest
-              .fn()
-              .mockImplementation(
-                async (mockUser: ReqUserDto) => await [mockOrder],
-              ),
-            createOrder: jest
-              .fn()
-              .mockImplementation(
-                async (
-                  mockCreateOrder: CreateOrderDto,
-                  mockUser: ReqUserDto,
-                ) => {
-                  return await {
-                    isActive: true,
-                    customerId: '123',
-                    orderId: '123',
-                    ...mockCreateOrder,
-                  };
-                },
-              ),
-            getOrderById: jest
-              .fn()
-              .mockImplementation(
-                async (orderId: string, mockUser: ReqUserDto) => {
-                  return await mockOrder;
-                },
-              ),
-            updateOrder: jest
-              .fn()
-              .mockImplementation(
-                async (
-                  orderId: string,
-                  mockUpdateOrder: UpdateOrderDto,
-                  mockUser: ReqUserDto,
-                ) => {
-                  return await {
-                    orderId: orderId,
-                    isActive: true,
-                    customerId: '123',
-                    ...mockUpdateOrder,
-                  };
-                },
-              ),
-            archiveOrder: jest
-              .fn()
-              .mockImplementation(
-                async (orderId: string, mockUser: ReqUserDto) => {
-                  return await { isActive: false };
-                },
-              ),
+            getOrders: jest.fn().mockResolvedValue([mockOrder]),
+            getOrderById: jest.fn().mockResolvedValue(mockOrder),
+            createOrder: jest.fn().mockResolvedValue(mockOrder),
+            updateOrder: jest.fn().mockResolvedValue(mockOrder),
+            archiveOrder: jest.fn().mockResolvedValue(mockOrder),
           },
         },
       ],
@@ -92,12 +44,9 @@ describe('OrdersController', () => {
 
   describe('createOrder()', () => {
     it('should create a new order', async () => {
-      expect(await controller.createOrder(mockCreateOrder, mockUser)).toEqual({
-        isActive: true,
-        customerId: '123',
-        orderId: '123',
-        ...mockCreateOrder,
-      });
+      expect(await controller.createOrder(mockCreateOrder, mockUser)).toEqual(
+        mockOrder,
+      );
     });
   });
 
@@ -113,20 +62,15 @@ describe('OrdersController', () => {
     it('should update an order by Id', async () => {
       expect(
         await controller.updateOrder(orderId, mockUpdateOrder, mockUser),
-      ).toEqual({
-        orderId: orderId,
-        isActive: true,
-        customerId: '123',
-        ...mockUpdateOrder,
-      });
+      ).toEqual(mockOrder);
     });
   });
 
   describe('archiveOrder()', () => {
     it('should archive an order by Id', async () => {
-      expect(await controller.archiveOrder(orderId, mockUser)).toEqual({
-        isActive: false,
-      });
+      expect(await controller.archiveOrder(orderId, mockUser)).toEqual(
+        mockOrder,
+      );
     });
   });
 });

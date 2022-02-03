@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockCreateUser, mockUser } from '../mock-testing-data/mock-user';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { mockCreateUser, mockUser } from '../mock-data/mock-users';
 import { UsersService } from '../users/users.service';
 import { PublicController } from './public.controller';
 
@@ -14,14 +13,7 @@ describe('PublicController', () => {
         {
           provide: UsersService,
           useValue: {
-            createUser: jest
-              .fn()
-              .mockImplementation(
-                async (mockCreateUser: CreateUserDto) => await mockUser,
-              ),
-            getUserById: jest
-              .fn()
-              .mockImplementation(async (userId) => await mockUser),
+            createUser: jest.fn().mockResolvedValue(mockUser),
           },
         },
       ],

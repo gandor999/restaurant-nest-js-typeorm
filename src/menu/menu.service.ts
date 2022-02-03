@@ -24,7 +24,7 @@ export class MenuService {
       type,
     };
     try {
-      const result = await this.menuRepository.create(createItem);
+      const result = this.menuRepository.create(createItem);
       return await this.menuRepository.save(result);
     } catch (err) {
       throw new ConflictException('item already exists');

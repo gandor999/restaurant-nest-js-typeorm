@@ -5,8 +5,7 @@ import {
   mockUsername,
   mockPassword,
   userId,
-} from '../mock-testing-data/mock-user';
-import { UpdateUsernameDto } from './dto/update-username.dto';
+} from '../mock-data/mock-users';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -21,47 +20,16 @@ describe('UsersController', () => {
           provide: UsersService,
           useValue: {
             getUsers: jest.fn().mockResolvedValue([mockUser]),
-            getUserById: jest
-              .fn()
-              .mockImplementation(async (userId: string) => {
-                return await mockUser;
-              }),
-            updateUsername: jest
-              .fn()
-              .mockImplementation(
-                async (
-                  userId: string,
-                  mockUpdateUsername: UpdateUsernameDto,
-                ) => {
-                  return await mockUser;
-                },
-              ),
+            getUserById: jest.fn().mockResolvedValue(mockUser),
+            updateUsername: jest.fn().mockResolvedValue(mockUser),
             updatePassword: jest
               .fn()
-              .mockImplementation(
-                async (
-                  userId: string,
-                  mockUpdateUsername: UpdateUsernameDto,
-                ) => {
-                  return await { message: 'password updated' };
-                },
-              ),
-
-            userToAdmin: jest
+              .mockResolvedValue({ message: 'password updated' }),
+            userToAdmin: jest.fn().mockResolvedValue(mockAdmin),
+            adminToUser: jest.fn().mockResolvedValue(mockUser),
+            removeUser: jest
               .fn()
-              .mockImplementation(async (userId: string) => {
-                return await mockAdmin;
-              }),
-
-            adminToUser: jest
-              .fn()
-              .mockImplementation(async (userId: string) => {
-                return await mockUser;
-              }),
-
-            removeUser: jest.fn().mockImplementation(async (userId: string) => {
-              return await { message: 'user removed' };
-            }),
+              .mockResolvedValue({ message: 'user removed' }),
           },
         },
       ],

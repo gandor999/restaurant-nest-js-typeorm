@@ -1,17 +1,16 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Role } from '../roles/role.enum';
-import { User } from '../users/schema/user.schema';
 import {
   mockUser,
   userId,
-  mockAdmin,
   mockToken,
   username,
   password,
-} from '../mock-testing-data/mock-user';
+} from '../mock-data/mock-users';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
+import { User } from 'src/users/entities/user.repository';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -24,16 +23,14 @@ describe('AuthService', () => {
         {
           provide: UsersService,
           useValue: {
-            getUserById: jest
-              .fn()
-              .mockImplementation(async () => (await mockAdmin) as User),
+            getUserById: jest.fn().mockResolvedValue(mockUser),
             getUserByUsername: jest.fn().mockImplementation(async () => {
               return await {
-                username: 'admin',
+                username: 'user',
                 password:
-                  '$2b$10$Qkg8c0Q3BUbEgXyjBUdl7.TBW0E/L/n5rDGGcn00.qNU6SVJYwCGC',
+                  '$2b$10$wIKYEglEaJ.1XcSj1Kljb.yBhIzUsMAj0psRDG1H3CUH8mgP7YF/e',
                 userId: userId,
-                roles: Role.Admin,
+                roles: Role.User,
               };
             }),
           },
@@ -56,9 +53,7 @@ describe('AuthService', () => {
   });
 
   it('should validate the user logging in', async () => {
-    expect(await authService.validateUser('admin', 'admin')).toEqual(
-      mockAdmin as User,
-    );
+    expect(await authService.validateUser('user', 'user')).toEqual(mockUser);
   });
 
   it('should login the user and return the access token', async () => {
