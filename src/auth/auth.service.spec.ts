@@ -10,7 +10,7 @@ import {
 } from '../mock-data/mock-users';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
-import { User } from 'src/users/entities/user.repository';
+import { User } from '../users/entities/user.repository';
 
 describe('AuthService', () => {
   let authService: AuthService;
