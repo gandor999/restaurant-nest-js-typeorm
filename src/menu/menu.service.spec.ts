@@ -47,26 +47,35 @@ describe('MenuService', () => {
 
   it('should create an item in the menu and return it', async () => {
     expect(await service.createMenu(mockCreateItem)).toEqual(mockItem);
+    expect(repository.create).toHaveBeenCalled();
+    expect(repository.save).toHaveBeenCalled();
   });
 
   it('should get all items', async () => {
     expect(await service.getMenu()).toEqual([mockItem]);
+    expect(repository.find).toHaveBeenCalled();
   });
 
   it('should find an item by id', async () => {
     expect(await service.getItemById(itemId)).toEqual(mockItem);
+    expect(repository.findOne).toHaveBeenCalled();
   });
 
   it('should get item by name', async () => {
     expect(await service.findItemByName(mockItem.item)).toEqual(mockItem);
+    expect(repository.createQueryBuilder).toHaveBeenCalled();
   });
 
   it('should update an item', async () => {
     expect(await service.updateItem(itemId, mockUpdateItem)).toEqual(mockItem);
+    expect(repository.save).toHaveBeenCalled();
   });
 
   it('should delete an item', async () => {
+    jest.spyOn(service, 'getItemById');
     expect(await service.deleteItem(itemId)).toEqual(mockItem);
+    expect(service.getItemById).toHaveBeenCalled();
+    expect(repository.delete).toHaveBeenCalled();
   });
 
   describe('error handling', () => {

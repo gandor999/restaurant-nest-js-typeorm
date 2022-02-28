@@ -17,7 +17,7 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { Menu } from './entities/menu.entity';
 import { MenuService } from './menu.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('menuItems')
 export class MenuController {
   constructor(private menuService: MenuService) {}
@@ -38,15 +38,15 @@ export class MenuController {
   }
 
   @Post()
-  @UseGuards(RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.Admin)
   async createMenu(@Body() createItemDto: CreateItemDto): Promise<Menu> {
     return this.menuService.createMenu(createItemDto);
   }
 
   @Patch('/:itemId')
-  @UseGuards(RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.Admin)
   async updateItem(
     @Param('itemId') itemId: string,
     @Body() updateItemDto: UpdateItemDto,
@@ -55,8 +55,8 @@ export class MenuController {
   }
 
   @Delete('/:itemId')
-  @UseGuards(RolesGuard)
-  @Roles(Role.Admin)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.Admin)
   async deleteItem(@Param('itemId') itemId: string): Promise<Menu> {
     return this.menuService.deleteItem(itemId);
   }
